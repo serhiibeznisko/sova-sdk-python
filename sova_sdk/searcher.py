@@ -7,6 +7,7 @@ from typing import Optional, Callable, List
 import ssl
 
 import grpc
+import grpc.aio
 
 from .generated import auth_pb2, searcher_pb2, searcher_pb2_grpc, dto_pb2
 
@@ -41,14 +42,14 @@ class SovaSearcher:
                 root_certificates=ca_pem.encode('utf-8')
             )
             # Create secure channel with TLS
-            channel = grpc.secure_channel(
+            channel = grpc.aio.secure_channel(
                 url,
                 credentials,
                 options=[('grpc.ssl_target_name_override', domain_name)]
             )
         else:
             # Create insecure channel
-            channel = grpc.insecure_channel(url)
+            channel = grpc.aio.insecure_channel(url)
 
         self.client = searcher_pb2_grpc.SearcherServiceStub(channel)
 
@@ -81,7 +82,7 @@ class SovaSearcher:
 
         try:
             stream = self.client.SubscribeMempool(subscription, metadata=metadata)
-            for packet in stream:
+            async for packet in stream:
                 on_data(packet)
         except grpc.RpcError as e:
             logger.error(f"Stream error: {e}")
@@ -193,7 +194,7 @@ class SovaSearcher:
         )
         await self.subscribe(subscription, on_data)
 
-    def send_bundle(self, bundle: dto_pb2.Bundle) -> searcher_pb2.SendBundleResponse:
+    async def send_bundle(self, bundle: dto_pb2.Bundle) -> searcher_pb2.SendBundleResponse:
         """
         Send a bundle of messages.
 
@@ -207,9 +208,9 @@ class SovaSearcher:
             grpc.RpcError: If sending the bundle fails
         """
         metadata = self._add_authorization_metadata()
-        return self.client.SendBundle(bundle, metadata=metadata)
+        return await self.client.SendBundle(bundle, metadata=metadata)
 
-    def get_tip_addresses(self) -> searcher_pb2.GetTipAddressesResponse:
+    async def get_tip_addresses(self) -> searcher_pb2.GetTipAddressesResponse:
         """
         Get the tip addresses for message inclusion.
 
@@ -221,7 +222,7 @@ class SovaSearcher:
         """
         metadata = self._add_authorization_metadata()
         request = searcher_pb2.GetTipAddressesRequest()
-        return self.client.GetTipAddresses(request, metadata=metadata)
+        return await self.client.GetTipAddresses(request, metadata=metadata)
 
     async def subscribe_bundle_result(
         self,
@@ -241,7 +242,7 @@ class SovaSearcher:
 
         try:
             stream = self.client.SubscribeBundleResults(request, metadata=metadata)
-            for result in stream:
+            async for result in stream:
                 on_data(result)
         except grpc.RpcError as e:
             logger.error(f"Stream error: {e}")

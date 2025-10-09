@@ -1,13 +1,14 @@
 """
 Example: Send a bundle to Sova Network.
 """
+import asyncio
 import os
 from datetime import datetime, timedelta
 from google.protobuf.timestamp_pb2 import Timestamp
 from sova_sdk import SovaClient, dto_pb2
 
 
-def main():
+async def main():
     # Create testnet client
     client = SovaClient.new_testnet_client()
 
@@ -46,7 +47,7 @@ def main():
     # Send the bundle
     print("Sending bundle...")
     try:
-        response = searcher.send_bundle(bundle)
+        response = await searcher.send_bundle(bundle)
         print(f"Bundle sent successfully!")
         print(f"Bundle ID: {response.id}")
     except Exception as e:
@@ -54,4 +55,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

@@ -1,11 +1,12 @@
 """
 Example: Get tip addresses for bundle inclusion.
 """
+import asyncio
 import os
 from sova_sdk import SovaClient
 
 
-def main():
+async def main():
     # Create testnet client
     client = SovaClient.new_testnet_client()
 
@@ -28,7 +29,7 @@ def main():
     # Get tip addresses
     print("\nFetching tip addresses...")
     try:
-        response = searcher.get_tip_addresses()
+        response = await searcher.get_tip_addresses()
         print(f"\nTip Addresses:")
         for i, address in enumerate(response.address, 1):
             print(f"  {i}. {address}")
@@ -37,4 +38,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
