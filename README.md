@@ -1,18 +1,50 @@
-# Sova SDK Python
+# Sova SDK for Python
 
-Python SDK for Sova Network MEV infrastructure on the TON blockchain. This SDK provides a wrapper for interacting with Sova's gRPC services including authentication, mempool subscriptions, and bundle submissions.
+[![PyPI version](https://badge.fury.io/py/sova-sdk.svg)](https://badge.fury.io/py/sova-sdk)
+[![Python Support](https://img.shields.io/pypi/pyversions/sova-sdk.svg)](https://pypi.org/project/sova-sdk/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+A Python SDK for [Sova Network](https://github.com/serhiibeznisko/sova-sdk-python) - a MEV (Maximal Extractable Value) infrastructure built for the TON blockchain. This SDK provides a comprehensive interface for interacting with Sova's gRPC services, enabling searchers and validators to participate in the MEV ecosystem.
+
+## Table of Contents
+
+- [What is Sova Network?](#what-is-sova-network)
+- [Installation](#installation)
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Usage Examples](#usage-examples)
+  - [Subscribe to Mempool by Address](#subscribe-to-mempool-by-address)
+  - [Subscribe to Mempool by Workchain](#subscribe-to-mempool-by-workchain)
+  - [Send a Bundle](#send-a-bundle)
+  - [Subscribe to Bundle Results](#subscribe-to-bundle-results)
+  - [Get Tip Addresses](#get-tip-addresses)
+  - [Block Engine (Validator Integration)](#block-engine-validator-integration)
+  - [Custom Client Configuration](#custom-client-configuration)
+- [API Reference](#api-reference)
+- [Resources](#resources)
+- [Contributing](#contributing)
+- [License](#license)
+
+## What is Sova Network?
+
+Sova Network provides MEV infrastructure on TON, allowing:
+- **Searchers** to monitor the mempool and submit bundles of transactions
+- **Validators** to receive and execute profitable bundles
+- **Secure authentication** using Ed25519 cryptography
+- **Real-time mempool streaming** with flexible filtering options
 
 ## Installation
 
-```bash
-pip install -e .
-```
-
-Or install dependencies directly:
+Install the package from PyPI:
 
 ```bash
-pip install grpcio grpcio-tools protobuf pynacl
+pip install sova-sdk
 ```
+
+## Requirements
+
+- Python >= 3.8
+- Dependencies are automatically installed: `grpcio`, `grpcio-tools`, `protobuf`, `pynacl`
 
 ## Features
 
@@ -244,32 +276,31 @@ Authentication client for Sova services.
 - `get_access_token()` - Get the current access token
 - `get_refresh_token()` - Get the refresh token
 
-## Development
+## Resources
 
-### Generate Proto Files
+- **GitHub Repository**: [sova-network/sova-sdk-python](https://github.com/serhiibeznisko/sova-sdk-python)
+- **Issue Tracker**: [GitHub Issues](https://github.com/serhiibeznisko/sova-sdk-python/issues)
+- **PyPI Package**: [pypi.org/project/sova-sdk](https://pypi.org/project/sova-sdk/)
 
-```bash
-python -m grpc_tools.protoc \
-  -I../grpc/proto \
-  --python_out=./sova_sdk/generated \
-  --grpc_python_out=./sova_sdk/generated \
-  --pyi_out=./sova_sdk/generated \
-  ../grpc/proto/auth.proto \
-  ../grpc/proto/dto.proto \
-  ../grpc/proto/searcher.proto \
-  ../grpc/proto/block_engine.proto
-```
+## Contributing
 
-### Run Tests
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+For development setup:
 
 ```bash
-pytest tests/
+# Clone the repository
+git clone https://github.com/serhiibeznisko/sova-sdk-python.git
+cd sova-sdk-python
+
+# Install in development mode
+pip install -e .
 ```
 
 ## License
 
-MIT
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Support
 
-For issues and questions, please visit [GitHub Issues](https://github.com/sova-network/sova-sdk-python/issues)
+For issues, questions, or feature requests, please visit our [GitHub Issues](https://github.com/serhiibeznisko/sova-sdk-python/issues) page.
